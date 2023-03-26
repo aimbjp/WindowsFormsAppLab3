@@ -14,6 +14,11 @@ namespace WindowsFormsAppLab3
     public partial class Form2 : Form
     {
         public Form1 parent;
+        public bool flagChanged = false;
+
+        public int prntValLine;
+        public Size prntValPointSize;
+
         public Form2(Form1 parentForm)
         {
             InitializeComponent();
@@ -21,16 +26,30 @@ namespace WindowsFormsAppLab3
             numericUpDown1.Value = parentForm.LineWidth;
             numericUpDown2.Value = parentForm.PointSize.Width;
             numericUpDown2.Value = parentForm.PointSize.Height;
+            prntValLine = parentForm.LineWidth;
+            prntValPointSize = parentForm.PointSize;
         }
 
         private void Form2_Load(object sender, EventArgs e)
         {
-
+            
         }
 
 
         private void Form2_FormClosing(object sender, FormClosingEventArgs e)
         {
+            if (flagChanged)
+            {
+                parent.LineWidth = (int)numericUpDown1.Value;
+                parent.PointSize = new Size((int)numericUpDown2.Value, (int)numericUpDown2.Value);
+                parent.Refresh();
+            }
+            else
+            {
+                parent.LineWidth = prntValLine;
+                parent.PointSize = prntValPointSize;
+                parent.Refresh();
+            }
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -41,9 +60,22 @@ namespace WindowsFormsAppLab3
 
         private void button1_Click(object sender, EventArgs e)
         {
+            flagChanged = true;
             parent.LineWidth = (int)numericUpDown1.Value;
             parent.PointSize = new Size((int)numericUpDown2.Value, (int)numericUpDown2.Value);
+        }
+
+        private void numericUpDown1_ValueChanged(object sender, EventArgs e)
+        {
+            parent.LineWidth = (int)numericUpDown1.Value;
             parent.Refresh();
+        }
+
+        private void numericUpDown2_ValueChanged(object sender, EventArgs e)
+        {
+            parent.PointSize = new Size((int)numericUpDown2.Value, (int)numericUpDown2.Value);
+            parent.Refresh();
+
         }
     }
 }
